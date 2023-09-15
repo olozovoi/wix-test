@@ -86,12 +86,32 @@ By providing different implementations for engine services we can write differen
 Module with simple console implementation of the game
 
 ### `ConsoleRenderer`
-Implements [`Renderer`](#renderer) by drawing board as simple ASCII table and printing it to stdout, `showText` is simple `printLine`.
+Implements `Renderer` by drawing board as simple ASCII table and printing it to stdout, `showText` is simple `printLine`.
 
 ### `ConsoleCommandProvider`
-Implements [`CommandProvider`](#commandprovider) by waiting on user input, parsing command, on error retry.
+Implements `CommandProvider` by waiting on user input, parsing command, on error retry.
 
 ### `ConsoleGame`
 Wires implementations to game loop and start game.
 
 # To improve
+Here are some improvements, I think, should be done, but under limited time I decided to postpone them because of indefinite time costs and/or them being not first priority.
+
+## Refine data model
+Present `Board` implementation is quite leaky, i.e. `Renderer` implementations must utilize fact that I represent empty tile as 0. Ideally, implementations should be agnostic to internal representation of `Board`.
+
+## Documentation
+Currently, this README is the only documentation for this project. `model` and `engine` must have all their public API documented, ideally private as well. In case of `console`, as well as any other game implementation, code should have thorough docs of engine services implementations. By making so, we increase readability of code and simplifying maintenance, though it also depends on how good is data model and overall architecture.
+
+## Better generation algorithm
+As I already stated in [`Generator`](#generator) section, there is generation algorithm that theoretically is better than present one. Would be nice to write it, run some benchmark to compare.
+
+## Tests
+First of all, for `model` I could verify that `Board#move` actually does the right thing with few unit tests.
+
+For `engine` I could test that `GameRuntime` handles `Command`s properly. Current implementation of `Generator` is correct by construction(well, at least theoretically), but to be sure that I wrote it correctly I could write some tests. But generally speaking each `Generator` implementation should be tested on solvability. That is, generator must generate solvable board. Moreover, it can be one test which works on `Generator` and I can supply there any implementation I need.
+
+For `console` I could test that `ConsoleRenderer` draws `Board` correctly and that `ConsoleCommandProvider` correctly parses user input and handles errors.
+
+## Indigo frontend
+Not much of improvement, but rather battle test of current architecture and interesting task by itself.
