@@ -1,4 +1,4 @@
-package core.generator
+package core.services
 
 import core.model.Game
 import zio.*

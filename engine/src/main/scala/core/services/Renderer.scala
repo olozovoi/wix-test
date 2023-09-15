@@ -1,4 +1,4 @@
-package core.runtime
+package core.services
 
 import core.model.Game
 import zio.*
