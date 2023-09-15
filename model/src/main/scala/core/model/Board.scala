@@ -8,7 +8,7 @@ case class Board(board: Vector[Int]) {
   private lazy val emptyIndex: Int = board.indexOf(Board.EMPTY)
 
   lazy val status: GameStatus =
-    if (emptyIndex == 15 && isSorted(board.slice(0, 16))) Finished else Ongoing
+    if (emptyIndex == 15 && isSorted(board.slice(0, 15))) Finished else Ongoing
 
   def move(direction: Direction): Either[MoveError, Board] = direction match
     case Up =>
