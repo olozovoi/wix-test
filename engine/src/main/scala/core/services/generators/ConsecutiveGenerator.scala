@@ -1,5 +1,7 @@
-package core.services
+package core.services.generators
+
 import core.model.{Board, Game}
+import core.services.Generator
 import zio.*
 
 object ConsecutiveGenerator extends Generator {
