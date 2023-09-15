@@ -31,9 +31,11 @@ case class Board(board: Vector[Int]) {
     Board(newBoard)
   }
 
-  private def isSorted(vector: Vector[Int]) = vector == vector.sorted
+  private def isSorted(vector: Vector[Int]) = vector === Board.finishedBoard
 }
 
 object Board {
   val EMPTY: Int = 0
+
+  private val finishedBoard: Vector[Int] = (1 to 15).toVector
 }
