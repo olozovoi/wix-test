@@ -14,9 +14,17 @@ Game supports 6 command:
 - **r**ight - will move empty square right
 
 # Project structure
-Project consist from 3 modules: **model**, **engine** and **console**.
-
-Modules are presented in order such each next depends on previous
+Project consist from 3 modules: **model**, **engine** and **console**. On early stages they were just different packages in same module, but to enforce dependency order and to avoid cyclic dependencies I split them to separate modules. Modules dependencies:
+```mermaid
+flowchart TD
+    A[model]
+    B[engine]
+    C[console]
+    B --> A
+    C --> A
+    C --> B
+  
+```
 
 ## model
 Contains all entities needed to describe game logic.
