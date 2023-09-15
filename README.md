@@ -31,6 +31,8 @@ Case class to represent incorrect attempt to move.
 Enum to represent if game is ongoing or finished
 
 ### `Board`
+Trait with 
+
 Represented as `Vector` with some shuffle of values from 0 to 15, 0 meaning empty cell.
 
 I could've chosen mutable `ArraySeq` for sake of performance, but I wanted solution to be in FP style. But still, from immutable collections `Vector` has the best combination of performances for random lookups and updates.
@@ -42,3 +44,35 @@ Also, would be interesting to research if it is possible to provide some type-sa
 
 ### `Game`
 Simple wrapper of `Board` with step counter.
+
+## engine
+This module contains game loop and services needed for it.
+
+### `Renderer`
+Responsible for presentation of the game to user.
+
+Has two methods:
+- `Renderer#render` to render game
+- `Renderer#showText` to show some message to player
+
+### `CommandProvider`
+Responsible for processing user input into commands and providing it to runtime.
+Has single method `nextCommand`, which returns enum of:
+- `StartNew` to start new game with regenerated board
+- `Quit` to quit the game
+- `Move(Direction)` to move empty cell in desired direction
+
+### `Generator`
+Needed for game start as it initialises new board. Currently, module have two implementations.
+
+`ConsecutiveGenerator` was used on earlier development stages and left as demonstration. It generates board filled with numbers from 0(empty) to 15.
+
+`RandomMovementGenerator` on the other hand provides correct generation.
+It does that by taking solved board and applying specified number of moves. I believe it's possible to calculate some reasonable default with minimum number of moves, so that most of the tiles will be moved, but setting it to 1000 does the job and works fast enough to user not to pay attention.
+
+After (very :)) fast research [I found](https://en.wikipedia.org/wiki/15_puzzle#Group_theory) an approach which won't use moves, but rather applying so-called 3-cycles. Having 3 different numbers (a b c), we can apply permutation (a->b, b->c, c->a) on board. It should be faster than `RandomMovementGenerator` so is a possible point of improvement.
+
+### `GameRuntime`
+Holds game loop. Essentially, endless cycle of "draw board; read command; process command".
+
+By providing different implementations for engine services we can write different frontends for the game apart from `console` module of this project. For example using [Indigo](https://github.com/PurpleKingdomGames/indigo) it is possible to write web version of game, desktop(via Electron) or even mobile(via Cordova).
