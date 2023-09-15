@@ -36,7 +36,7 @@ Enum of 4 possible directions.
 Case class to represent incorrect attempt to move.
 
 ### `GameStatus`
-Enum to represent if game is ongoing or finished
+Enum to represent if game is ongoing or finished.
 
 ### `Board`
 Trait with few defined methods:
@@ -48,12 +48,12 @@ _Having board as `trait` rather than `[case] class` allows to change model witho
 
 Current implementation represented as `Vector` with some shuffle of values from 0 to 15, 0 meaning empty cell.
 
-I could've chosen mutable `ArraySeq` for sake of performance, but I wanted solution to be in FP style. But still, from immutable collections `Vector` has the best combination of performances for random lookups and updates.
+I could've chosen mutable `ArraySeq` for sake of performance, but I wanted solution to be in FP style. But still, from immutable collections, `Vector` has the best combination of performances for random lookups and updates.
 
 From representation point of view I could've chosen `Vector[Vector[Int]]`, but that would work only in case of mutable datta structures. With nested `Vector`s `Board#swap` would be much more complex and in some cases (moving up or down)
 would involve 2 more updates (update corresponding horizontals and then update final structure).
 
-Also, would be interesting to research if it is possible to provide some type-safe representation, e.g. have possible moves at type level as state as `Board[HList[Up, Left]]` or something like this. But I haven't found fast enough any variant, which would be possible to use, not to mention convenient. So I stayed with `Vector[Int]` version, because it gets work done and implementation isn't hard to read or test.
+Also, would be interesting to research if it is possible to provide some type-safe representation, e.g. have possible moves at type level as state, i.e. `Board[HList[Up, Left]]` or something like this. But I haven't found fast enough any variant, which would be possible to use, not to mention convenient. So I stayed with `Vector[Int]` version, because it gets work done and implementation isn't hard to read or test.
 
 ### `Game`
 Simple wrapper of `Board` with step counter.
@@ -76,7 +76,7 @@ Has single method `nextCommand`, which returns enum of:
 - `Move(Direction)` to move empty cell in desired direction
 
 ### `Generator`
-Needed for game start as it initialises new board. Currently, module have two implementations.
+Needed for game start as it initializes new board. Currently, module have two implementations.
 
 `ConsecutiveGenerator` was used on earlier development stages and left as demonstration. It generates board filled with numbers from 0(empty) to 15.
 
@@ -84,6 +84,8 @@ Needed for game start as it initialises new board. Currently, module have two im
 It does that by taking solved board and applying specified number of moves. I believe it's possible to calculate some reasonable default with minimum number of moves, so that most of the tiles will be moved, but setting it to 1000 does the job and works fast enough to user not to pay attention.
 
 After (very :)) fast research [I found](https://en.wikipedia.org/wiki/15_puzzle#Group_theory) an approach which won't use moves, but rather applying so-called 3-cycles. Having 3 different numbers (a b c), we can apply permutation (a->b, b->c, c->a) on board. It should be faster than `RandomMovementGenerator` so is a possible point of improvement.
+
+Having `Generator` as interface allows to have multiple implementations, compare them, even switch on the fly if needed.
 
 ### `GameRuntime`
 Holds game loop. Essentially, endless cycle of "draw board; read command; process command".
@@ -100,13 +102,13 @@ Implements `Renderer` by drawing board as simple ASCII table and printing it to 
 Implements `CommandProvider` by waiting on user input, parsing command, on error retry.
 
 ### `ConsoleGame`
-Wires implementations to game loop and start game.
+Wires implementations to game loop and starts game.
 
 # To improve
 Here are some improvements, I think, should be done, but under limited time I decided to postpone them because of indefinite time costs and/or them being not first priority.
 
 ## Refine data model
-Present `Board` implementation is quite leaky, i.e. `Renderer` implementations must utilize fact that I represent empty tile as 0. Ideally, implementations should be agnostic to internal representation of `Board`.
+Present `Board` implementation is quite leaky, i.e. `Renderer` implementations must utilize fact that I represent empty tile as 0. Ideally, implementations should be agnostic to internal representation of `Board`. On the other side I could say that it is a part of contract and `Board#flat` will always return `Iterator[Int]` with 0 being empty tile regardless of implementation.
 
 ## Documentation
 Currently, this README is the only documentation for this project. `model` and `engine` must have all their public API documented, ideally private as well. In case of `console`, as well as any other game implementation, code should have thorough docs of engine services implementations. By making so, we increase readability of code and simplifying maintenance, though it also depends on how good is data model and overall architecture.
@@ -115,7 +117,7 @@ Currently, this README is the only documentation for this project. `model` and `
 As I already stated in [`Generator`](#generator) section, there is generation algorithm that theoretically is better than present one. Would be nice to write it, run some benchmark to compare.
 
 ## Tests
-First of all, for `model` I could verify that `Board#move` actually does the right thing with few unit tests.
+First of all, for `model` I could verify that `Board#move` actually does the right thing with few unit tests. Also in case of different implementations I could test that `Board#flat` returns correct iterator.
 
 For `engine` I could test that `GameRuntime` handles `Command`s properly. Current implementation of `Generator` is correct by construction(well, at least theoretically), but to be sure that I wrote it correctly I could write some tests. But generally speaking each `Generator` implementation should be tested on solvability. That is, generator must generate solvable board. Moreover, it can be one test which works on `Generator` and I can supply there any implementation I need.
 
