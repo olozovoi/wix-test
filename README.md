@@ -19,7 +19,7 @@ Project consist from 3 modules: **model**, **engine** and **console**.
 Modules are presented in order such each next depends on previous
 
 ## model
-Contains all entities needed to describe game logic
+Contains all entities needed to describe game logic.
 
 ### `Direction`
 Enum of 4 possible directions.
@@ -31,9 +31,14 @@ Case class to represent incorrect attempt to move.
 Enum to represent if game is ongoing or finished
 
 ### `Board`
-Trait with 
+Trait with few defined methods:
+- `flat` returns iterator over board moving left-to-right, top-to-bottom
+- `status` returns game status
+- `move(Direction)` tries to move empty tile to specified direction
 
-Represented as `Vector` with some shuffle of values from 0 to 15, 0 meaning empty cell.
+_Having board as `trait` rather than `[case] class` allows to change model without affecting consumers of `model` module._
+
+Current implementation represented as `Vector` with some shuffle of values from 0 to 15, 0 meaning empty cell.
 
 I could've chosen mutable `ArraySeq` for sake of performance, but I wanted solution to be in FP style. But still, from immutable collections `Vector` has the best combination of performances for random lookups and updates.
 
