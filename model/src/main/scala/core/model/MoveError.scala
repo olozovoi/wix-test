@@ -1,3 +1,3 @@
 package core.model
 
-case class MoveError (direction: Direction)
+case class MoveError(direction: Direction)
