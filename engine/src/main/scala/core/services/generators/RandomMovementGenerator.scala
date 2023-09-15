@@ -7,7 +7,7 @@ import zio.*
 case class RandomMovementGenerator(depth: Int) extends Generator {
   override def gen: UIO[Game] = genBoard(finishedBoard, depth).map(Game(_, 0))
 
-  private val finishedBoard = Board((1 to 15).toVector :+ Board.EMPTY)
+  private val finishedBoard = Board((1 to 15) :+ Board.EMPTY)
 
   private val directions = Direction.values
 

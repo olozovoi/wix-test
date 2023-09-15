@@ -8,7 +8,7 @@ object ConsoleRenderer extends Renderer {
   override def render(game: Game): UIO[Unit] = Console.printLine(draw(game.board)).orDie
 
   private def draw(board: Board): String = {
-    board.board.map {
+    board.flat.map {
       case Board.EMPTY => " xx "
       case n           => " %02d ".format(n)
     }.grouped(4).map(_.mkString("|")).mkString("\n-------------------\n")
