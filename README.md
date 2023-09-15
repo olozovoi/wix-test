@@ -76,3 +76,17 @@ After (very :)) fast research [I found](https://en.wikipedia.org/wiki/15_puzzle#
 Holds game loop. Essentially, endless cycle of "draw board; read command; process command".
 
 By providing different implementations for engine services we can write different frontends for the game apart from `console` module of this project. For example using [Indigo](https://github.com/PurpleKingdomGames/indigo) it is possible to write web version of game, desktop(via Electron) or even mobile(via Cordova).
+
+## console
+Module with simple console implementation of the game
+
+### `ConsoleRenderer`
+Implements [`Renderer`](#renderer) by drawing board as simple ASCII table and printing it to stdout, `showText` is simple `printLine`.
+
+### `ConsoleCommandProvider`
+Implements [`CommandProvider`](#commandprovider) by waiting on user input, parsing command, on error retry.
+
+### `ConsoleGame`
+Wires implementations to game loop and start game.
+
+# To improve
