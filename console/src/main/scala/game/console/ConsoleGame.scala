@@ -7,5 +7,5 @@ import zio.*
 
 object ConsoleGame extends ZIOAppDefault {
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = GameRuntime.run
-    .provide(ConsoleRenderer.layer, ConsoleCommandProvider.layer, RandomMovementGenerator.layer(1))
+    .provide(ConsoleRenderer.layer, ConsoleCommandProvider.layer, RandomMovementGenerator.layer(1000))
 }
