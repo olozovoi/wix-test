@@ -5,7 +5,7 @@ import indigo.scenes.*
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
-@JSExportTopLevel("IndigoGame")
+// @JSExportTopLevel("IndigoGame")
 object HelloIndigo extends IndigoGame[Unit, Unit, Model, Unit] {
 
   private val magnification = 3
