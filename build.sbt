@@ -17,6 +17,7 @@ lazy val console = project
 
 lazy val indigo = project.enablePlugins(ScalaJSPlugin, SbtIndigo)
   .settings(name := "indigo", settings, indigoSettingsAndDeps, libraryDependencies ++= commonDeps)
+  .dependsOn(engine)
 
 lazy val deps = new {
   val version = new {

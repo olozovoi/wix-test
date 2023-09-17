@@ -1,3 +1,5 @@
+package game.indigo
+
 import indigo.*
 import indigo.scenes.*
 
