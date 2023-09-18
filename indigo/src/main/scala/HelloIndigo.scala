@@ -1,11 +1,9 @@
-package game.indigo
-
 import indigo.*
 import indigo.scenes.*
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
-// @JSExportTopLevel("IndigoGame")
+//@JSExportTopLevel("IndigoGame")
 object HelloIndigo extends IndigoGame[Unit, Unit, Model, Unit] {
 
   private val magnification = 3
@@ -67,6 +65,7 @@ object HelloIndigo extends IndigoGame[Unit, Unit, Model, Unit] {
       (Math.sin(dot.angle.toDouble) * dot.orbitDistance + center.x).toInt,
       (Math.cos(dot.angle.toDouble) * dot.orbitDistance + center.y).toInt
     )
+    println(Dot)
 
     Graphic(Rectangle(0, 0, 32, 32), 1, Material.Bitmap(assetName))
       .withCrop(Rectangle(16, 16, 16, 16)).withRef(8, 8).moveTo(position)
