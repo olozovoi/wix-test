@@ -3,21 +3,22 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.1"
 
 lazy val root = (project in file(".")).settings(name := "wix-test")
-  .aggregate(model, engine, console, indigo).dependsOn(model, engine, console, indigo)
+  .aggregate(model.jvm, model.js, engine.jvm, engine.js, console, indigo)
 
-lazy val model = project.settings(name := "model", settings, libraryDependencies ++= commonDeps)
+lazy val model = crossProject(JSPlatform, JVMPlatform)
+  .settings(name := "model", settings, libraryDependencies ++= commonDeps)
 
-lazy val engine = project
+lazy val engine = crossProject(JSPlatform, JVMPlatform)
   .settings(name := "engine", settings, libraryDependencies ++= commonDeps ++ Seq(deps.zio))
   .dependsOn(model)
 
 lazy val console = project
   .settings(name := "console", settings, libraryDependencies ++= commonDeps ++ Seq(deps.zio))
-  .dependsOn(engine)
+  .dependsOn(engine.jvm)
 
 lazy val indigo = project.enablePlugins(ScalaJSPlugin, SbtIndigo)
   .settings(name := "indigo", settings, indigoSettingsAndDeps, libraryDependencies ++= commonDeps)
-  .dependsOn(engine)
+  .dependsOn(engine.js)
 
 lazy val deps = new {
   val version = new {
@@ -47,16 +48,18 @@ lazy val indigoSettingsAndDeps = Seq(
   showCursor := true,
   title := "15 Puzzle",
   gameAssetsDirectory := "assets",
-  windowStartWidth := 550, // Width of Electron window, used with `indigoRun`.
-  windowStartHeight := 400, // Height of Electron window, used with `indigoRun`.
+  windowStartWidth := 518, // Width of Electron window, used with `indigoRun`.
+  windowStartHeight := 518, // Height of Electron window, used with `indigoRun`.
   libraryDependencies ++= Seq(
     "io.indigoengine" %%% "indigo" % deps.version.indigo,
     "io.indigoengine" %%% "indigo-extras" % deps.version.indigo,
-    "io.indigoengine" %%% "indigo-json-circe" % deps.version.indigo
+    "io.indigoengine" %%% "indigo-json-circe" % deps.version.indigo,
+    "dev.zio" %%% "zio" % deps.version.zio,
+    "io.github.cquiroz" %%% "scala-java-time" % "2.3.0"
   )
 )
 
-addCommandAlias("buildGame", ";indigo/compile;indigo/fastOptJS;indigo/indigoBuild")
-addCommandAlias("runGame", ";indigo/compile;indigo/fastOptJS;indigo/indigoRun")
-addCommandAlias("buildGameFull", ";indigo/compile;indigo/fullOptJS;indigo/indigoBuildFull")
-addCommandAlias("runGameFull", ";indigo/compile;indigo/fullOptJS;indigo/indigoRunFull")
+addCommandAlias("buildGame", ";compile;indigo/fastOptJS;indigo/indigoBuild")
+addCommandAlias("runGame", ";compile;indigo/fastOptJS;indigo/indigoRun")
+addCommandAlias("buildGameFull", ";compile;indigo/fullOptJS;indigo/indigoBuildFull")
+addCommandAlias("runGameFull", ";compile;indigo/fullOptJS;indigo/indigoRunFull")

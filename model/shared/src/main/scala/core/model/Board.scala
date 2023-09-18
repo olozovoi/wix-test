@@ -22,7 +22,7 @@ object Board {
   private case class BoardImpl(board: Vector[Int]) extends Board {
     private lazy val emptyIndex: Int = board.indexOf(Board.EMPTY)
 
-    val flat: Iterator[Int] = board.iterator
+    def flat: Iterator[Int] = board.iterator
 
     lazy val status: GameStatus = if (emptyIndex == 15 && isSorted(board)) Finished else Ongoing
 
