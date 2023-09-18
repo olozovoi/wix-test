@@ -47,14 +47,12 @@ object IndigoGame extends IndigoGame[Unit, Unit, Model, Unit] {
   ): GlobalEvent => Outcome[Model] =
     case GameSubSystem.RenderEvent.Render(game)   => Outcome(model.copy(game = game))
     case GameSubSystem.RenderEvent.ShowText(text) => Outcome(model)
-    case KeyboardEvent.KeyUp(key) =>
-      val event = key match
-        case Key.UP_ARROW    => CommandEvent(Command.Move(D.Up))
-        case Key.DOWN_ARROW  => CommandEvent(Command.Move(D.Down))
-        case Key.LEFT_ARROW  => CommandEvent(Command.Move(D.Left))
-        case Key.RIGHT_ARROW => CommandEvent(Command.Move(D.Right))
 
-      Outcome(model).addGlobalEvents(event)
+    case KeyboardEvent.KeyUp(Key.UP_ARROW)    => Outcome(model).addGlobalEvents(CommandEvent.Up)
+    case KeyboardEvent.KeyUp(Key.DOWN_ARROW)  => Outcome(model).addGlobalEvents(CommandEvent.Down)
+    case KeyboardEvent.KeyUp(Key.LEFT_ARROW)  => Outcome(model).addGlobalEvents(CommandEvent.Left)
+    case KeyboardEvent.KeyUp(Key.RIGHT_ARROW) => Outcome(model).addGlobalEvents(CommandEvent.Right)
+
     case _ => Outcome(model)
 
   override def updateViewModel(
