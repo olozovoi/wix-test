@@ -1,6 +1,6 @@
 package game.indigo.subsystem
 
-import core.model.Game
+import core.model.{Direction, Game}
 import core.runtime.GameRuntime
 import core.services.Command
 import core.services.generators.RandomMovementGenerator
@@ -56,7 +56,7 @@ object GameSubSystem {
       _ <- GameRuntime.run.provide(
         IndigoCommandProvider.layer(commandQueue),
         IndigoRenderer.layer(renderQueue),
-        RandomMovementGenerator.layer(1)
+        RandomMovementGenerator.layer(2)
       ).forkDaemon
     } yield (commandQueue, renderQueue)
 
@@ -70,6 +70,13 @@ object GameSubSystem {
     case ShowText(text: String)
 
   case class CommandEvent(cmd: Command) extends GlobalEvent
+
+  object CommandEvent {
+    val Up: CommandEvent = CommandEvent(Command.Move(Direction.Up))
+    val Down: CommandEvent = CommandEvent(Command.Move(Direction.Down))
+    val Left: CommandEvent = CommandEvent(Command.Move(Direction.Left))
+    val Right: CommandEvent = CommandEvent(Command.Move(Direction.Right))
+  }
 
   case object GameSubSystemEnqueue extends GlobalEvent
 }
