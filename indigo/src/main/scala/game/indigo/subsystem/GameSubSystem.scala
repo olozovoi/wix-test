@@ -2,7 +2,6 @@ package game.indigo.subsystem
 
 import core.model.Game
 import core.runtime.GameRuntime
-import core.runtime.GameRuntime.Env
 import core.services.Command
 import core.services.generators.RandomMovementGenerator
 import game.indigo.services.{IndigoCommandProvider, IndigoRenderer}
@@ -12,7 +11,6 @@ import indigo.shared.collections.Batch
 import indigo.shared.events.{FrameTick, GlobalEvent}
 import indigo.shared.scenegraph.SceneUpdateFragment
 import indigo.shared.subsystems.{SubSystem, SubSystemFrameContext, SubSystemId}
-import org.scalajs.dom.EventTarget
 import zio.*
 
 case class GameSubSystem(commandQueue: Queue[Command], renderQueue: Queue[RenderEvent])
