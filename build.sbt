@@ -49,7 +49,7 @@ lazy val indigoSettingsAndDeps = Seq(
   title := "15 Puzzle",
   gameAssetsDirectory := "assets",
   windowStartWidth := 518, // Width of Electron window, used with `indigoRun`.
-  windowStartHeight := 518, // Height of Electron window, used with `indigoRun`.
+  windowStartHeight := 548, // Height of Electron window, used with `indigoRun`.
   libraryDependencies ++= Seq(
     "io.indigoengine" %%% "indigo" % deps.version.indigo,
     "io.indigoengine" %%% "indigo-extras" % deps.version.indigo,

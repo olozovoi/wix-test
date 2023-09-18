@@ -10,8 +10,7 @@ import zio.{Queue, UIO, ULayer, ZIO, ZLayer, Console}
 case class IndigoRenderer(renderQueue: Queue[RenderEvent]) extends Renderer {
   override def render(game: Game): UIO[Unit] = renderQueue.offer(Render(game)).ignore
 
-  override def showText(text: String): UIO[Unit] =
-    Console.printLine(text).orDie // renderQueue.offer(ShowText(text)).ignore
+  override def showText(text: String): UIO[Unit] = renderQueue.offer(ShowText(text)).ignore
 }
 
 object IndigoRenderer {

@@ -14,7 +14,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 @JSExportTopLevel("IndigoGame")
 object IndigoGame extends IndigoGame[Unit, Unit, Model, Unit] {
 
-  val config: GameConfig = GameConfig.default.withViewport(518, 518)
+  val config: GameConfig = GameConfig.default.withViewport(518, 548)
 
   private def asset(n: Int): AssetName = AssetName(s"cell_$n")
 
@@ -46,7 +46,7 @@ object IndigoGame extends IndigoGame[Unit, Unit, Model, Unit] {
       model: Model
   ): GlobalEvent => Outcome[Model] =
     case GameSubSystem.RenderEvent.Render(game)   => Outcome(model.copy(game = game))
-    case GameSubSystem.RenderEvent.ShowText(text) => Outcome(model)
+    case GameSubSystem.RenderEvent.ShowText(text) => Outcome(model.copy(msg = text))
 
     case KeyboardEvent.KeyUp(Key.UP_ARROW)    => Outcome(model).addGlobalEvents(CommandEvent.Up)
     case KeyboardEvent.KeyUp(Key.DOWN_ARROW)  => Outcome(model).addGlobalEvents(CommandEvent.Down)
@@ -68,22 +68,26 @@ object IndigoGame extends IndigoGame[Unit, Unit, Model, Unit] {
       context: FrameContext[Unit],
       model: Model,
       viewModel: Unit
-  ): Outcome[SceneUpdateFragment] = Outcome(SceneUpdateFragment(drawGame(model.game)))
+  ): Outcome[SceneUpdateFragment] =
+    Outcome(SceneUpdateFragment(drawMsg(model.msg) :: drawGame(model.game)))
+
+  private def drawMsg(msg: String) = TextBox(msg, 518, 30).withColor(RGBA.White)
+    .withFontSize(Pixels(24)).alignCenter
 
   private def drawGame(game: Game): Batch[Graphic[_]] = {
     val rects = game.board.flat.zipWithIndex.map { case (n, i) =>
       val (x, y) = (i % 4, i / 4)
       val size = 128
       val c = size + 2
-      Graphic(Rectangle(size, size), Material.Bitmap(asset(n)).stretch).moveTo(x * c, y * c)
+      Graphic(Rectangle(size, size), Material.Bitmap(asset(n)).stretch).moveTo(x * c, y * c + 30)
     }.toSeq
 
     Batch.fromSeq(rects)
   }
 }
 
-case class Model(game: Game)
+case class Model(game: Game, msg: String)
 
 object Model {
-  def initial: Model = Model(Game(Board(0 to 15), 0))
+  def initial: Model = Model(Game(Board(0 to 15), 0), "")
 }
