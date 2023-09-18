@@ -56,7 +56,7 @@ object GameSubSystem {
       _ <- GameRuntime.run.provide(
         IndigoCommandProvider.layer(commandQueue),
         IndigoRenderer.layer(renderQueue),
-        RandomMovementGenerator.layer(2)
+        RandomMovementGenerator.layer(3)
       ).forkDaemon
     } yield (commandQueue, renderQueue)
 
@@ -72,6 +72,9 @@ object GameSubSystem {
   case class CommandEvent(cmd: Command) extends GlobalEvent
 
   object CommandEvent {
+    val StartNew: CommandEvent = CommandEvent(Command.StartNew)
+    val Quit: CommandEvent = CommandEvent(Command.Quit)
+
     val Up: CommandEvent = CommandEvent(Command.Move(Direction.Up))
     val Down: CommandEvent = CommandEvent(Command.Move(Direction.Down))
     val Left: CommandEvent = CommandEvent(Command.Move(Direction.Left))

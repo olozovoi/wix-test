@@ -53,6 +53,9 @@ object IndigoGame extends IndigoGame[Unit, Unit, Model, Unit] {
     case KeyboardEvent.KeyUp(Key.LEFT_ARROW)  => Outcome(model).addGlobalEvents(CommandEvent.Left)
     case KeyboardEvent.KeyUp(Key.RIGHT_ARROW) => Outcome(model).addGlobalEvents(CommandEvent.Right)
 
+    case KeyboardEvent.KeyUp(Key.KEY_S) => Outcome(model).addGlobalEvents(CommandEvent.StartNew)
+    case KeyboardEvent.KeyUp(Key.KEY_Q) => Outcome(model).addGlobalEvents(CommandEvent.Quit)
+
     case _ => Outcome(model)
 
   override def updateViewModel(
