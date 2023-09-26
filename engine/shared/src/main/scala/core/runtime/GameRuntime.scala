@@ -13,7 +13,11 @@ object GameRuntime {
     _ <- Renderer.render(game)
 
     _ <- game.status match
-      case Finished => Renderer.showText(s"Congratulations! You finished in ${game.steps} steps")
+      case Finished => for {
+          _ <- Renderer.showText(s"Congratulations! You finished in ${game.steps} steps")
+          cmd <- CommandProvider.nextCommand.repeatWhile(cmd => cmd.isInstanceOf[Command.Move])
+          _ <- processCommand(game, cmd)
+        } yield ()
       case Ongoing => for {
           cmd <- CommandProvider.nextCommand
           _ <- processCommand(game, cmd)
